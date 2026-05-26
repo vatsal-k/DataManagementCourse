@@ -1,1356 +1,1187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Data Management Mastery — 5-Day Course</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
-<style>
-  :root {
-    --bg: #0a0d14;
-    --surface: #111520;
-    --surface2: #161c2b;
-    --border: #1e2740;
-    --accent1: #4ff0b0;
-    --accent2: #f7c948;
-    --accent3: #7b8cff;
-    --accent4: #ff6b6b;
-    --accent5: #c084fc;
-    --text: #e8eaf0;
-    --muted: #7a8399;
-    --day1: #4ff0b0;
-    --day2: #f7c948;
-    --day3: #7b8cff;
-    --day4: #ff6b6b;
-    --day5: #c084fc;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Lora', Georgia, serif;
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 40px 24px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(79,240,176,0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(79,240,176,0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
-    animation: gridShift 20s linear infinite;
-  }
-  @keyframes gridShift { to { background-position: 40px 40px; } }
-  .hero-glow {
-    position: absolute;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(79,240,176,0.12) 0%, transparent 70%);
-    border-radius: 50%;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    animation: pulse 4s ease-in-out infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.1)} }
-  .hero-content { position: relative; z-index: 2; max-width: 780px; }
-  .badge {
-    display: inline-block;
-    background: rgba(79,240,176,0.1);
-    border: 1px solid rgba(79,240,176,0.3);
-    color: var(--accent1);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 6px 16px;
-    border-radius: 20px;
-    margin-bottom: 24px;
-  }
-  h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2.4rem, 6vw, 4.2rem);
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, #fff 30%, var(--accent1) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero p {
-    font-size: 1.1rem;
-    color: var(--muted);
-    max-width: 560px;
-    margin: 0 auto 40px;
-  }
-  .hero-stats {
-    display: flex;
-    gap: 32px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 48px;
-  }
-  .stat {
-    text-align: center;
-  }
-  .stat-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--accent1);
-  }
-  .stat-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .cta-btn {
-    display: inline-block;
-    background: var(--accent1);
-    color: #0a0d14;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    padding: 14px 36px;
-    border-radius: 6px;
-    text-decoration: none;
-    letter-spacing: 0.5px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 0 24px rgba(79,240,176,0.3);
-  }
-  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(79,240,176,0.5); }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Management Mastery - 10 Day Course</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  /* ── NAV ── */
-  .day-nav {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(10,13,20,0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    display: flex;
-    gap: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .day-nav::-webkit-scrollbar { display: none; }
-  .nav-tab {
-    padding: 16px 20px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--muted);
-    text-decoration: none;
-    border-bottom: 2px solid transparent;
-    white-space: nowrap;
-    transition: all 0.2s;
-  }
-  .nav-tab:hover, .nav-tab.active { color: var(--text); border-bottom-color: var(--accent1); }
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-  /* ── MAIN ── */
-  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+        :root {
+            --primary: #1e40af;
+            --secondary: #0f766e;
+            --accent: #dc2626;
+            --light-bg: #f8fafc;
+            --dark-bg: #0f172a;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --success: #059669;
+            --warning: #d97706;
+            --gradient-1: linear-gradient(135deg, #1e40af 0%, #0f766e 100%);
+            --gradient-2: linear-gradient(135deg, #0f766e 0%, #0891b2 100%);
+            --shadow: 0 20px 60px rgba(15, 23, 42, 0.1);
+            --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.08);
+        }
 
-  /* ── DAY SECTION ── */
-  .day-section { padding: 80px 0 60px; border-bottom: 1px solid var(--border); }
-  .day-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 24px;
-    margin-bottom: 48px;
-    flex-wrap: wrap;
-  }
-  .day-number {
-    font-family: 'Syne', sans-serif;
-    font-size: 5rem;
-    font-weight: 800;
-    line-height: 1;
-    opacity: 0.15;
-    flex-shrink: 0;
-  }
-  .day-meta { flex: 1; min-width: 200px; }
-  .day-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    padding: 4px 12px;
-    border-radius: 4px;
-    display: inline-block;
-    border: 1px solid;
-  }
-  .day-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 8px;
-  }
-  .day-time {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--muted);
-  }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-  /* ── CHAPTER ── */
-  .chapter {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 32px;
-    overflow: hidden;
-    transition: border-color 0.2s;
-  }
-  .chapter:hover { border-color: rgba(79,240,176,0.2); }
-  .chapter-header {
-    padding: 24px 28px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    user-select: none;
-  }
-  .chapter-icon {
-    width: 48px; height: 48px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
-  }
-  .chapter-info { flex: 1; }
-  .chapter-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-  }
-  .chapter-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.15rem;
-    font-weight: 700;
-  }
-  .chapter-toggle {
-    font-size: 20px;
-    color: var(--muted);
-    transition: transform 0.3s;
-    flex-shrink: 0;
-  }
-  .chapter.open .chapter-toggle { transform: rotate(180deg); }
-  .chapter-body {
-    display: none;
-    padding: 0 28px 28px;
-    border-top: 1px solid var(--border);
-  }
-  .chapter.open .chapter-body { display: block; }
+        /* Header */
+        header {
+            background: var(--gradient-1);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-  /* ── VISUAL DIAGRAM ── */
-  .diagram {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 28px;
-    margin: 24px 0;
-    overflow-x: auto;
-  }
-  .diagram-title {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-  }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
 
-  /* Flow diagram */
-  .flow {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .flow-node {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 16px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    text-align: center;
-    min-width: 100px;
-    position: relative;
-  }
-  .flow-arrow {
-    color: var(--muted);
-    font-size: 20px;
-    padding: 0 4px;
-    flex-shrink: 0;
-  }
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            animation: slideInDown 0.8s ease-out;
+            letter-spacing: -1px;
+        }
 
-  /* Stack diagram */
-  .stack { display: flex; flex-direction: column; gap: 4px; max-width: 500px; margin: 0 auto; }
-  .stack-layer {
-    padding: 12px 20px;
-    border-radius: 6px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .stack-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            animation: slideInUp 0.8s ease-out 0.2s backwards;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
 
-  /* Comparison table */
-  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .compare-table th {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 10px 14px;
-    background: var(--bg);
-    color: var(--muted);
-    text-align: left;
-    border: 1px solid var(--border);
-  }
-  .compare-table td {
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-    vertical-align: top;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--text);
-  }
-  .compare-table tr:hover td { background: var(--surface2); }
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 1;
+        }
 
-  /* Architecture diagram */
-  .arch-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 8px;
-  }
-  .arch-box {
-    padding: 14px 10px;
-    border-radius: 8px;
-    text-align: center;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-  }
-  .arch-box .arch-icon { font-size: 24px; margin-bottom: 6px; }
+        .stat {
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
 
-  /* Concept card */
-  .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 20px 0; }
-  .concept-card {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px;
-  }
-  .concept-card h4 {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  .concept-card p {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.5;
-    font-family: 'DM Mono', monospace;
-  }
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: block;
+        }
 
-  /* Prose inside chapters */
-  .prose { margin: 20px 0; }
-  .prose h3 {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    margin: 24px 0 10px;
-    color: var(--text);
-  }
-  .prose p { font-size: 0.95rem; color: #bcc3d4; margin-bottom: 12px; }
-  .prose ul { margin: 10px 0 14px 20px; }
-  .prose li { font-size: 0.9rem; color: #bcc3d4; margin-bottom: 6px; }
-  .prose code {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    background: var(--surface2);
-    padding: 2px 7px;
-    border-radius: 4px;
-    color: var(--accent1);
-  }
-  .prose pre {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 18px;
-    overflow-x: auto;
-    margin: 16px 0;
-  }
-  .prose pre code { background: none; padding: 0; font-size: 12px; color: var(--accent1); }
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-  /* highlight label */
-  .hl { color: var(--accent1); font-weight: 600; }
-  .hl2 { color: var(--accent2); font-weight: 600; }
-  .hl3 { color: var(--accent3); font-weight: 600; }
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
 
-  /* key term */
-  .key-terms { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
-  .term {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    background: rgba(79,240,176,0.08);
-    border: 1px solid rgba(79,240,176,0.2);
-    color: var(--accent1);
-  }
+        /* Course Grid */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
 
-  /* quiz */
-  .quiz-box {
-    background: rgba(247,201,72,0.06);
-    border: 1px solid rgba(247,201,72,0.2);
-    border-radius: 10px;
-    padding: 20px 24px;
-    margin: 24px 0;
-  }
-  .quiz-box h4 {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--accent2);
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .quiz-box p { font-size: 13px; color: var(--text); margin-bottom: 10px; }
-  .quiz-answer {
-    background: var(--surface2);
-    border-radius: 6px;
-    padding: 12px 16px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--muted);
-    display: none;
-    margin-top: 10px;
-  }
-  .show-btn {
-    background: rgba(247,201,72,0.1);
-    border: 1px solid rgba(247,201,72,0.3);
-    color: var(--accent2);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    padding: 6px 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
+        /* Day Card */
+        .day-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
 
-  /* progress tracker */
-  .progress-bar {
-    height: 3px;
-    background: var(--border);
-    border-radius: 2px;
-    margin: 12px 0 32px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.5s ease;
-  }
+        .day-card:nth-child(1) { animation-delay: 0.1s; }
+        .day-card:nth-child(2) { animation-delay: 0.2s; }
+        .day-card:nth-child(3) { animation-delay: 0.3s; }
+        .day-card:nth-child(4) { animation-delay: 0.4s; }
+        .day-card:nth-child(5) { animation-delay: 0.5s; }
+        .day-card:nth-child(6) { animation-delay: 0.6s; }
+        .day-card:nth-child(7) { animation-delay: 0.1s; }
+        .day-card:nth-child(8) { animation-delay: 0.2s; }
+        .day-card:nth-child(9) { animation-delay: 0.3s; }
+        .day-card:nth-child(10) { animation-delay: 0.4s; }
 
-  /* timeline */
-  .timeline { position: relative; padding-left: 32px; margin: 20px 0; }
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 10px; top: 0; bottom: 0;
-    width: 1px;
-    background: var(--border);
-  }
-  .timeline-item { position: relative; margin-bottom: 20px; }
-  .timeline-dot {
-    position: absolute;
-    left: -28px; top: 4px;
-    width: 12px; height: 12px;
-    border-radius: 50%;
-    border: 2px solid var(--accent1);
-    background: var(--bg);
-  }
-  .timeline-item h4 {
-    font-family: 'Syne', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .timeline-item p { font-size: 13px; color: var(--muted); margin: 0; }
+        .day-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease-out;
+        }
 
-  /* footer */
-  footer {
-    text-align: center;
-    padding: 60px 24px;
-    border-top: 1px solid var(--border);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  footer a { color: var(--accent1); text-decoration: none; }
+        .day-card:hover::before {
+            transform: scaleX(1);
+        }
 
-  /* scrollbar */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        .day-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(15, 23, 42, 0.15);
+            border-color: var(--primary);
+        }
 
-  @media(max-width:600px){
-    .day-number { font-size: 3rem; }
-    .chapter-header { flex-wrap: wrap; }
-    .flow { gap: 4px; }
-    .flow-node { min-width: 80px; font-size: 10px; padding: 8px 10px; }
-  }
-</style>
+        .day-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--gradient-1);
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+        }
+
+        .day-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .day-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .day-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.2;
+        }
+
+        .topics-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .topics-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .topics-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .expand-btn {
+            margin-top: 1.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .expand-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 3rem;
+            position: relative;
+            box-shadow: 0 50px 100px rgba(15, 23, 42, 0.2);
+            animation: slideInUp 0.4s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .modal-info strong {
+            color: var(--primary);
+        }
+
+        .content-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--gradient-1);
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, rgba(30, 64, 175, 0.1) 0%, rgba(15, 118, 110, 0.1) 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            margin: 1.5rem 0;
+        }
+
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .key-point {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .key-point:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(30, 64, 175, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .key-point-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .key-point-content {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-bg);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        footer p {
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        /* Animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+
+            .header-stats {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+            }
+
+            .stat-number {
+                font-size: 1.8rem;
+            }
+
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 2rem;
+                border-radius: 16px;
+            }
+
+            .modal-title {
+                font-size: 1.8rem;
+            }
+
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-grid"></div>
-  <div class="hero-glow"></div>
-  <div class="hero-content">
-    <div class="badge">Engineering & Analytics</div>
-    <h1>Data Management<br/>Mastery</h1>
-    <p>A complete 5-day visual course covering all 11 pillars of the data engineering and analytics lifecycle — 45 minutes a day.</p>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-num">5</div><div class="stat-label">Days</div></div>
-      <div class="stat"><div class="stat-num">11</div><div class="stat-label">Chapters</div></div>
-      <div class="stat"><div class="stat-num">45m</div><div class="stat-label">Per Day</div></div>
-      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Free</div></div>
-    </div>
-    <a href="#day1" class="cta-btn">Start Learning →</a>
-  </div>
-</section>
-
-<!-- NAV -->
-<nav class="day-nav">
-  <a href="#day1" class="nav-tab active">Day 1 — Foundation</a>
-  <a href="#day2" class="nav-tab">Day 2 — Storage</a>
-  <a href="#day3" class="nav-tab">Day 3 — Integration</a>
-  <a href="#day4" class="nav-tab">Day 4 — Quality</a>
-  <a href="#day5" class="nav-tab">Day 5 — Governance</a>
-</nav>
-
-<div class="container">
-
-<!-- ═══════════════════════ DAY 1 ═══════════════════════ -->
-<section class="day-section" id="day1">
-  <div class="day-header">
-    <div class="day-number" style="color:var(--day1)">01</div>
-    <div class="day-meta">
-      <div class="day-tag" style="color:var(--day1);border-color:rgba(79,240,176,0.3);background:rgba(79,240,176,0.07)">Day 1 of 5</div>
-      <div class="day-title">Foundation — Ingestion & the Lifecycle</div>
-      <div class="day-time">⏱ 45 min &nbsp;|&nbsp; Chapters 1 & Overview</div>
-    </div>
-  </div>
-  <div class="progress-bar"><div class="progress-fill" style="width:20%;background:var(--day1)"></div></div>
-
-  <!-- CHAPTER 0: Overview -->
-  <div class="chapter open">
-    <div class="chapter-header" onclick="toggle(this)">
-      <div class="chapter-icon" style="background:rgba(79,240,176,0.1)">🗺️</div>
-      <div class="chapter-info">
-        <div class="chapter-num">Overview · 10 min</div>
-        <div class="chapter-title">The Big Picture — Data Lifecycle Map</div>
-      </div>
-      <div class="chapter-toggle">▼</div>
-    </div>
-    <div class="chapter-body">
-      <div class="prose">
-        <p>Before diving into individual components, understand how they connect. Every enterprise data system follows a <span class="hl">source → process → serve</span> arc. Each stage has specific tools, patterns, and failure modes.</p>
-      </div>
-      <div class="diagram">
-        <div class="diagram-title">📊 End-to-End Data Lifecycle</div>
-        <div class="flow">
-          <div class="flow-node" style="border-color:rgba(79,240,176,0.4);color:var(--day1)">📥 Sources<br/><small>APIs, DBs, IoT</small></div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="border-color:rgba(247,201,72,0.4);color:var(--day2)">⚙️ Ingest<br/><small>Batch/Stream</small></div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="border-color:rgba(123,140,255,0.4);color:var(--day3)">🗄️ Store<br/><small>Lake/Warehouse</small></div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="border-color:rgba(255,107,107,0.4);color:var(--day4)">🔄 Transform<br/><small>ETL/ELT</small></div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="border-color:rgba(192,132,252,0.4);color:var(--day5)">📊 Serve<br/><small>BI/ML/APIs</small></div>
-        </div>
-        <br/>
-        <div style="text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">
-          ↕ &nbsp;&nbsp; Governance + Quality + Security + Cataloging (horizontal concerns at every layer) &nbsp;&nbsp; ↕
-        </div>
-      </div>
-      <div class="concept-grid">
-        <div class="concept-card">
-          <h4 style="color:var(--accent1)">Operational Data</h4>
-          <p>Live transactional data from apps, sensors, and user activity</p>
-        </div>
-        <div class="concept-card">
-          <h4 style="color:var(--accent2)">Analytical Data</h4>
-          <p>Historical, aggregated data used for reporting and ML</p>
-        </div>
-        <div class="concept-card">
-          <h4 style="color:var(--accent3)">Data Products</h4>
-          <p>Curated datasets treated as internal products with SLAs</p>
-        </div>
-        <div class="concept-card">
-          <h4 style="color:var(--accent4)">Data Mesh</h4>
-          <p>Decentralized ownership by domain teams vs central platform</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CHAPTER 1: Ingestion -->
-  <div class="chapter">
-    <div class="chapter-header" onclick="toggle(this)">
-      <div class="chapter-icon" style="background:rgba(79,240,176,0.1)">📥</div>
-      <div class="chapter-info">
-        <div class="chapter-num">Chapter 1 · 35 min</div>
-        <div class="chapter-title">Data Ingestion — Getting Data In</div>
-      </div>
-      <div class="chapter-toggle">▼</div>
-    </div>
-    <div class="chapter-body">
-      <div class="key-terms">
-        <span class="term">Batch</span><span class="term">Streaming</span><span class="term">CDC</span>
-        <span class="term">Kafka</span><span class="term">API Pull</span><span class="term">Webhooks</span>
-      </div>
-      <div class="prose">
-        <p>Data ingestion is the <span class="hl">entry point</span> of any data pipeline. It determines latency, cost, and downstream freshness. The two fundamental modes are batch and streaming.</p>
-        <h3>Batch vs Streaming</h3>
-      </div>
-      <div class="diagram">
-        <div class="diagram-title">⚡ Batch vs Streaming Ingestion</div>
-        <table class="compare-table">
-          <tr><th>Dimension</th><th>Batch Ingestion</th><th>Streaming Ingestion</th></tr>
-          <tr><td>Latency</td><td>Minutes to hours</td><td>Milliseconds to seconds</td></tr>
-          <tr><td>Tools</td><td>Airflow, Cron, Spark</td><td>Kafka, Kinesis, Flink</td></tr>
-          <tr><td>Cost</td><td>Lower</td><td>Higher (infra always on)</td></tr>
-          <tr><td>Use case</td><td>Nightly reports, ETL</td><td>Fraud detection, alerts</td></tr>
-          <tr><td>Complexity</td><td>Lower</td><td>Higher (ordering, exactly-once)</td></tr>
-        </table>
-      </div>
-      <div class="prose">
-        <h3>Change Data Capture (CDC)</h3>
-        <p>CDC is a pattern to capture <span class="hl">only the rows that changed</span> in a source database, instead of full table scans. Tools like <code>Debezium</code> read the database transaction log (binlog) and emit events to Kafka.</p>
-      </div>
-      <div class="diagram">
-        <div class="diagram-title">🔄 CDC Architecture</div>
-        <div class="flow">
-          <div class="flow-node">MySQL<br/>Database</div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="color:var(--accent1)">Debezium<br/>Connector</div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="color:var(--accent2)">Kafka<br/>Topic</div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="color:var(--accent3)">Data<br/>Warehouse</div>
-        </div>
-        <br/>
-        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-align:center">
-          INSERT / UPDATE / DELETE events captured in near-real-time
-        </div>
-      </div>
-      <div class="prose">
-        <h3>Common Ingestion Sources</h3>
-        <ul>
-          <li><strong>RDBMS:</strong> PostgreSQL, MySQL via JDBC or CDC</li>
-          <li><strong>REST APIs:</strong> Polling or webhook push</li>
-          <li><strong>Message queues:</strong> Kafka, RabbitMQ, SQS</li>
-          <li><strong>Files:</strong> CSV, Parquet, JSON dropped to S3/GCS</li>
-          <li><strong>IoT/sensors:</strong> MQTT → Kafka → lake</li>
-          <li><strong>SaaS:</strong> Salesforce, HubSpot via Fivetran/Airbyte</li>
-        </ul>
-      </div>
-      <div class="quiz-box">
-        <h4>🧠 Quick Check</h4>
-        <p>A fintech company wants to detect fraudulent transactions within 2 seconds of them occurring. Should they use batch or streaming ingestion? Why?</p>
-        <button class="show-btn" onclick="showAns(this)">Show Answer</button>
-        <div class="quiz-answer">Streaming ingestion — because fraud detection requires sub-second latency. Batch (e.g., hourly jobs) would process the fraud too late. Tools: Kafka + Flink or Kafka Streams. Latency target of &lt;2s rules out any batch approach.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════ DAY 2 ═══════════════════════ -->
-<section class="day-section" id="day2">
-  <div class="day-header">
-    <div class="day-number" style="color:var(--day2)">02</div>
-    <div class="day-meta">
-      <div class="day-tag" style="color:var(--day2);border-color:rgba(247,201,72,0.3);background:rgba(247,201,72,0.07)">Day 2 of 5</div>
-      <div class="day-title">Storage — Where Data Lives</div>
-      <div class="day-time">⏱ 45 min &nbsp;|&nbsp; Chapters 2 & 3</div>
-    </div>
-  </div>
-  <div class="progress-bar"><div class="progress-fill" style="width:40%;background:var(--day2)"></div></div>
-
-  <!-- CHAPTER 2 -->
-  <div class="chapter open">
-    <div class="chapter-header" onclick="toggle(this)">
-      <div class="chapter-icon" style="background:rgba(247,201,72,0.1)">🗄️</div>
-      <div class="chapter-info">
-        <div class="chapter-num">Chapter 2 · 25 min</div>
-        <div class="chapter-title">Data Storage — Lakes, Warehouses & Lakehouses</div>
-      </div>
-      <div class="chapter-toggle">▼</div>
-    </div>
-    <div class="chapter-body">
-      <div class="key-terms">
-        <span class="term" style="color:var(--accent2);background:rgba(247,201,72,0.08);border-color:rgba(247,201,72,0.2)">OLTP</span>
-        <span class="term" style="color:var(--accent2);background:rgba(247,201,72,0.08);border-color:rgba(247,201,72,0.2)">OLAP</span>
-        <span class="term" style="color:var(--accent2);background:rgba(247,201,72,0.08);border-color:rgba(247,201,72,0.2)">Data Lake</span>
-        <span class="term" style="color:var(--accent2);background:rgba(247,201,72,0.08);border-color:rgba(247,201,72,0.2)">Lakehouse</span>
-        <span class="term" style="color:var(--accent2);background:rgba(247,201,72,0.08);border-color:rgba(247,201,72,0.2)">Partitioning</span>
-      </div>
-      <div class="diagram">
-        <div class="diagram-title">🏗️ Storage Architecture Evolution</div>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-dot" style="border-color:var(--accent3)"></div>
-            <h4>RDBMS (1980s–) <small style="color:var(--muted)">OLTP</small></h4>
-            <p>Row-oriented. Fast writes/point queries. Postgres, MySQL. Not built for analytics at scale.</p>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot" style="border-color:var(--accent2)"></div>
-            <h4>Data Warehouse (1990s–) <small style="color:var(--muted)">OLAP</small></h4>
-            <p>Column-oriented. Optimised for aggregations. Redshift, Teradata. Structured data only.</p>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot" style="border-color:var(--accent1)"></div>
-            <h4>Data Lake (2010s–) <small style="color:var(--muted)">Raw</small></h4>
-            <p>Schema-on-read. Stores raw files (CSV, JSON, Parquet) on cheap object storage (S3). Risk: swamp.</p>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot" style="border-color:var(--accent5)"></div>
-            <h4>Lakehouse (2020s) <small style="color:var(--muted)">Best of Both</small></h4>
-            <p>Delta Lake, Iceberg, Hudi. ACID on data lakes. Schema enforcement + cheap storage.</p>
-          </div>
-        </div>
-      </div>
-      <div class="diagram">
-        <div class="diagram-title">📐 Storage Layer Comparison</div>
-        <table class="compare-table">
-          <tr><th>Feature</th><th>Data Warehouse</th><th>Data Lake</th><th>Lakehouse</th></tr>
-          <tr><td>Schema</td><td>Schema-on-write</td><td>Schema-on-read</td><td>Both</td></tr>
-          <tr><td>ACID</td><td>✅ Yes</td><td>❌ No</td><td>✅ Yes</td></tr>
-          <tr><td>Data types</td><td>Structured</td><td>Any</td><td>Any</td></tr>
-          <tr><td>Cost</td><td>High</td><td>Low</td><td>Low-Med</td></tr>
-          <tr><td>Example</td><td>Snowflake, BigQuery</td><td>S3 + Hive</td><td>Databricks, Delta</td></tr>
-        </table>
-      </div>
-      <div class="prose">
-        <h3>File Formats Matter</h3>
-        <ul>
-          <li><code>CSV/JSON</code> — human-readable, large, no compression by default</li>
-          <li><code>Parquet</code> — columnar, compressed, ideal for analytics queries</li>
-          <li><code>ORC</code> — similar to Parquet, preferred in Hive/Presto</li>
-          <li><code>Avro</code> — row-based, great for schema evolution in streaming</li>
-        </ul>
-        <h3>Partitioning Strategy</h3>
-        <p>Partitioning splits data into folders by a key (e.g., <code>date=2024-01-15/country=IN/</code>). Queries that filter on the partition key skip irrelevant files entirely — called <span class="hl2">partition pruning</span>.</p>
-      </div>
-      <div class="quiz-box">
-        <h4>🧠 Quick Check</h4>
-        <p>Your ML team needs to store raw image files, JSON event logs, and processed feature tables. Which storage architecture fits best?</p>
-        <button class="show-btn" onclick="showAns(this)">Show Answer</button>
-        <div class="quiz-answer">Lakehouse (e.g., Delta Lake on S3). Raw images and JSON go into the lake zone. Processed features are written as Delta tables with schema enforcement. Supports both unstructured + structured data with ACID guarantees.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CHAPTER 3: Data Modeling -->
-  <div class="chapter">
-    <div class="chapter-header" onclick="toggle(this)">
-      <div class="chapter-icon" style="background:rgba(247,201,72,0.1)">📐</div>
-      <div class="chapter-info">
-        <div class="chapter-num">Chapter 3 · 20 min</div>
-        <div class="chapter-title">Data Modeling — Structuring for Usability</div>
-      </div>
-      <div class="chapter-toggle">▼</div>
-    </div>
-    <div class="chapter-body">
-      <div class="prose">
-        <p>A data model is the <span class="hl2">blueprint</span> that determines how tables relate. Good models make queries fast, intuitive, and maintainable.</p>
-      </div>
-      <div class="diagram">
-        <div class="diagram-title">⭐ Star Schema (Most Common in Warehouses)</div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
-          <div class="flow-node" style="background:rgba(247,201,72,0.1);border-color:rgba(247,201,72,0.4);color:var(--accent2);min-width:160px;">📅 Dim: Date</div>
-          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;">
-            <div class="flow-node" style="background:rgba(123,140,255,0.1);border-color:rgba(123,140,255,0.4);color:var(--accent3)">👤 Dim: Customer</div>
-            <div style="font-size:20px;color:var(--muted)">→</div>
-            <div class="flow-node" style="background:rgba(79,240,176,0.15);border-color:rgba(79,240,176,0.5);color:var(--accent1);min-width:140px;padding:16px 20px">
-              ⭐ FACT: Sales<br/><small>revenue, qty, discount</small>
+    <header>
+        <h1>Data Management Mastery</h1>
+        <p>Master the fundamentals and advanced concepts in 10 days</p>
+        <div class="header-stats">
+            <div class="stat">
+                <span class="stat-number">10</span>
+                <span class="stat-label">Days</span>
             </div>
-            <div style="font-size:20px;color:var(--muted)">←</div>
-            <div class="flow-node" style="background:rgba(255,107,107,0.1);border-color:rgba(255,107,107,0.4);color:var(--accent4)">📦 Dim: Product</div>
-          </div>
-          <div class="flow-node" style="background:rgba(192,132,252,0.1);border-color:rgba(192,132,252,0.4);color:var(--accent5);min-width:160px;">🏪 Dim: Store</div>
-        </div>
-        <br/>
-        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-align:center">Fact table = measurements. Dimension tables = context for slicing.</div>
-      </div>
-      <div class="prose">
-        <h3>Modeling Approaches</h3>
-        <ul>
-          <li><strong>Kimball (Star Schema):</strong> Denormalized. Fast queries. Great for BI.</li>
-          <li><strong>Inmon (3NF):</strong> Normalised warehouse. Slower queries but flexible.</li>
-          <li><strong>Data Vault:</strong> Hubs, Links, Satellites. Audit-friendly, handles change well.</li>
-          <li><strong>OBT (One Big Table):</strong> Fully flat. Fastest queries, highest storage cost.</li>
-        </ul>
-        <h3>Slowly Changing Dimensions (SCD)</h3>
-        <p>What if a customer changes their city? <span class="hl2">SCD Type 2</span> keeps history by adding a new row with validity dates. Type 1 overwrites. Type 3 stores old+new in columns.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════ DAY 3 ═══════════════════════ -->
-<section class="day-section" id="day3">
-  <div class="day-header">
-    <div class="day-number" style="color:var(--day3)">03</div>
-    <div class="day-meta">
-      <div class="day-tag" style="color:var(--day3);border-color:rgba(123,140,255,0.3);background:rgba(123,140,255,0.07)">Day 3 of 5</div>
-      <div class="day-title">Integration — Moving & Transforming Data</div>
-      <div class="day-time">⏱ 45 min &nbsp;|&nbsp; Chapters 4 & 5</div>
-    </div>
-  </div>
-  <div class="progress-bar"><div class="progress-fill" style="width:60%;background:var(--day3)"></div></div>
-
-  <!-- CHAPTER 4: ETL/ELT -->
-  <div class="chapter open">
-    <div class="chapter-header" onclick="toggle(this)">
-      <div class="chapter-icon" style="background:rgba(123,140,255,0.1)">🔄</div>
-      <div class="chapter-info">
-        <div class="chapter-num">Chapter 4 · 25 min</div>
-        <div class="chapter-title">Data Integration & ETL/ELT</div>
-      </div>
-      <div class="chapter-toggle">▼</div>
-    </div>
-    <div class="chapter-body">
-      <div class="key-terms">
-        <span class="term" style="color:var(--accent3);background:rgba(123,140,255,0.08);border-color:rgba(123,140,255,0.2)">ETL</span>
-        <span class="term" style="color:var(--accent3);background:rgba(123,140,255,0.08);border-color:rgba(123,140,255,0.2)">ELT</span>
-        <span class="term" style="color:var(--accent3);background:rgba(123,140,255,0.08);border-color:rgba(123,140,255,0.2)">dbt</span>
-        <span class="term" style="color:var(--accent3);background:rgba(123,140,255,0.08);border-color:rgba(123,140,255,0.2)">Airflow</span>
-        <span class="term" style="color:var(--accent3);background:rgba(123,140,255,0.08);border-color:rgba(123,140,255,0.2)">Spark</span>
-        <span class="term" style="color:var(--accent3);background:rgba(123,140,255,0.08);border-color:rgba(123,140,255,0.2)">Orchestration</span>
-      </div>
-      <div class="diagram">
-        <div class="diagram-title">🔁 ETL vs ELT Pattern</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-          <div>
-            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--accent1);margin-bottom:10px;text-transform:uppercase">ETL (Traditional)</div>
-            <div class="flow" style="flex-direction:column;align-items:flex-start;gap:4px;">
-              <div class="flow-node" style="width:100%;text-align:left">1. Extract from source</div>
-              <div style="color:var(--muted);font-size:20px;padding-left:20px">↓</div>
-              <div class="flow-node" style="width:100%;text-align:left;color:var(--accent2)">2. Transform in staging</div>
-              <div style="color:var(--muted);font-size:20px;padding-left:20px">↓</div>
-              <div class="flow-node" style="width:100%;text-align:left;color:var(--accent3)">3. Load to warehouse</div>
+            <div class="stat">
+                <span class="stat-number">50+</span>
+                <span class="stat-label">Topics</span>
             </div>
-            <p style="font-size:11px;color:var(--muted);margin-top:8px;font-family:'DM Mono',monospace">⚠️ Complex. Transform before load.</p>
-          </div>
-          <div>
-            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--accent1);margin-bottom:10px;text-transform:uppercase">ELT (Modern)</div>
-            <div class="flow" style="flex-direction:column;align-items:flex-start;gap:4px;">
-              <div class="flow-node" style="width:100%;text-align:left">1. Extract from source</div>
-              <div style="color:var(--muted);font-size:20px;padding-left:20px">↓</div>
-              <div class="flow-node" style="width:100%;text-align:left;color:var(--accent3)">2. Load raw to warehouse</div>
-              <div style="color:var(--muted);font-size:20px;padding-left:20px">↓</div>
-              <div class="flow-node" style="width:100%;text-align:left;color:var(--accent2)">3. Transform with SQL/dbt</div>
+            <div class="stat">
+                <span class="stat-number">∞</span>
+                <span class="stat-label">Knowledge</span>
             </div>
-            <p style="font-size:11px;color:var(--muted);margin-top:8px;font-family:'DM Mono',monospace">✅ Simpler. Warehouse does the heavy lifting.</p>
-          </div>
         </div>
-      </div>
-      <div class="prose">
-        <h3>dbt — The Modern Transform Layer</h3>
-        <p><code>dbt</code> (data build tool) lets analysts write transformations in <span class="hl3">plain SQL</span>. It handles dependency resolution, testing, docs, and versioning. A typical dbt project has:</p>
-        <ul>
-          <li><code>models/staging/</code> — clean raw tables</li>
-          <li><code>models/intermediate/</code> — business logic</li>
-          <li><code>models/marts/</code> — final analytical tables</li>
-        </ul>
-        <h3>Orchestration with Airflow</h3>
-        <p>Apache Airflow schedules and monitors pipelines as <span class="hl3">DAGs</span> (Directed Acyclic Graphs). Each node in the DAG is a task (SQL query, Python script, Spark job). Failures trigger alerts and retries automatically.</p>
-      </div>
-      <div class="diagram">
-        <div class="diagram-title">🌐 Airflow DAG Example — Daily Sales Pipeline</div>
-        <div class="flow">
-          <div class="flow-node" style="color:var(--accent1)">extract_crm<br/><small>Python</small></div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="color:var(--accent2)">load_raw<br/><small>S3→Snowflake</small></div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="color:var(--accent3)">dbt_run<br/><small>Transform</small></div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="color:var(--accent5)">dbt_test<br/><small>Validate</small></div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="color:var(--accent4)">notify_slack<br/><small>Alert</small></div>
-        </div>
-      </div>
-      <div class="quiz-box">
-        <h4>🧠 Quick Check</h4>
-        <p>A startup uses BigQuery and their team only knows SQL. Should they use ETL or ELT? What tool for transformations?</p>
-        <button class="show-btn" onclick="showAns(this)">Show Answer</button>
-        <div class="quiz-answer">ELT — load raw data into BigQuery first, then transform using dbt. BigQuery's compute is cheap at scale, and dbt lets SQL-fluent analysts own transformations without needing Python/Spark.</div>
-      </div>
-    </div>
-  </div>
+    </header>
 
-  <!-- CHAPTER 5: Metadata & Cataloging -->
-  <div class="chapter">
-    <div class="chapter-header" onclick="toggle(this)">
-      <div class="chapter-icon" style="background:rgba(123,140,255,0.1)">📚</div>
-      <div class="chapter-info">
-        <div class="chapter-num">Chapter 5 · 20 min</div>
-        <div class="chapter-title">Metadata Management & Data Cataloging</div>
-      </div>
-      <div class="chapter-toggle">▼</div>
+    <div class="container">
+        <div class="course-grid" id="courseGrid"></div>
     </div>
-    <div class="chapter-body">
-      <div class="prose">
-        <p>Without a catalog, engineers spend 30%+ of their time <span class="hl3">just finding data</span>. Metadata management answers: what exists, where is it, who owns it, what does it mean?</p>
-        <h3>Types of Metadata</h3>
-      </div>
-      <div class="concept-grid">
-        <div class="concept-card">
-          <h4 style="color:var(--accent3)">Technical</h4>
-          <p>Schema, data types, row count, null %, column stats, partitions</p>
-        </div>
-        <div class="concept-card">
-          <h4 style="color:var(--accent2)">Business</h4>
-          <p>Descriptions, glossary terms, business owner, data domain, SLA</p>
-        </div>
-        <div class="concept-card">
-          <h4 style="color:var(--accent1)">Operational</h4>
-          <p>Last refreshed, job history, query frequency, cost per query</p>
-        </div>
-        <div class="concept-card">
-          <h4 style="color:var(--accent4)">Lineage</h4>
-          <p>Where did this column come from? What depends on it?</p>
-        </div>
-      </div>
-      <div class="prose">
-        <h3>Popular Catalog Tools</h3>
-        <ul>
-          <li><strong>DataHub (LinkedIn):</strong> Open source, rich lineage, API-first</li>
-          <li><strong>Apache Atlas:</strong> Hadoop ecosystem, governance-first</li>
-          <li><strong>Alation:</strong> Enterprise, AI-powered search</li>
-          <li><strong>dbt Docs:</strong> Auto-generated from your dbt project</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ═══════════════════════ DAY 4 ═══════════════════════ -->
-<section class="day-section" id="day4">
-  <div class="day-header">
-    <div class="day-number" style="color:var(--day4)">04</div>
-    <div class="day-meta">
-      <div class="day-tag" style="color:var(--day4);border-color:rgba(255,107,107,0.3);background:rgba(255,107,107,0.07)">Day 4 of 5</div>
-      <div class="day-title">Quality, Lineage & Observability</div>
-      <div class="day-time">⏱ 45 min &nbsp;|&nbsp; Chapters 6, 7 & 8</div>
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title" id="modalTitle"></h2>
+                    <div class="modal-meta">
+                        <div class="modal-info">
+                            ⏱️ <strong id="readTime">15 min</strong> read
+                        </div>
+                        <div class="modal-info">
+                            📚 <strong id="topicCount">8</strong> topics
+                        </div>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
     </div>
-  </div>
-  <div class="progress-bar"><div class="progress-fill" style="width:80%;background:var(--day4)"></div></div>
 
-  <!-- CHAPTER 6: Data Quality -->
-  <div class="chapter open">
-    <div class="chapter-header" onclick="toggle(this)">
-      <div class="chapter-icon" style="background:rgba(255,107,107,0.1)">✅</div>
-      <div class="chapter-info">
-        <div class="chapter-num">Chapter 6 · 18 min</div>
-        <div class="chapter-title">Data Quality & Validation</div>
-      </div>
-      <div class="chapter-toggle">▼</div>
-    </div>
-    <div class="chapter-body">
-      <div class="diagram">
-        <div class="diagram-title">🎯 The 6 Dimensions of Data Quality</div>
-        <div class="arch-grid">
-          <div class="arch-box" style="border-color:rgba(79,240,176,0.3)">
-            <div class="arch-icon">🎯</div>
-            <div style="color:var(--accent1);font-weight:600">Accuracy</div>
-            <div style="color:var(--muted);font-size:10px;margin-top:4px">Correct values</div>
-          </div>
-          <div class="arch-box" style="border-color:rgba(247,201,72,0.3)">
-            <div class="arch-icon">📋</div>
-            <div style="color:var(--accent2);font-weight:600">Completeness</div>
-            <div style="color:var(--muted);font-size:10px;margin-top:4px">No missing data</div>
-          </div>
-          <div class="arch-box" style="border-color:rgba(123,140,255,0.3)">
-            <div class="arch-icon">🔗</div>
-            <div style="color:var(--accent3);font-weight:600">Consistency</div>
-            <div style="color:var(--muted);font-size:10px;margin-top:4px">Same across systems</div>
-          </div>
-          <div class="arch-box" style="border-color:rgba(255,107,107,0.3)">
-            <div class="arch-icon">⏰</div>
-            <div style="color:var(--accent4);font-weight:600">Timeliness</div>
-            <div style="color:var(--muted);font-size:10px;margin-top:4px">Data is fresh</div>
-          </div>
-          <div class="arch-box" style="border-color:rgba(192,132,252,0.3)">
-            <div class="arch-icon">🆔</div>
-            <div style="color:var(--accent5);font-weight:600">Uniqueness</div>
-            <div style="color:var(--muted);font-size:10px;margin-top:4px">No duplicates</div>
-          </div>
-          <div class="arch-box" style="border-color:rgba(79,240,176,0.3)">
-            <div class="arch-icon">✔️</div>
-            <div style="color:var(--accent1);font-weight:600">Validity</div>
-            <div style="color:var(--muted);font-size:10px;margin-top:4px">Matches rules</div>
-          </div>
-        </div>
-      </div>
-      <div class="prose">
-        <h3>Testing with Great Expectations</h3>
-        <p><code>Great Expectations</code> lets you define expectations like assertions on your data. These run in your pipeline and halt it if violated.</p>
-        <pre><code># Example expectation
-expect_column_values_to_not_be_null("user_id")
-expect_column_values_to_be_between("age", 0, 120)
-expect_column_values_to_be_unique("order_id")
-expect_column_pair_values_to_be_equal("price", "total/qty")</code></pre>
-        <h3>Anomaly Detection</h3>
-        <p>Beyond static checks, tools like <code>Monte Carlo</code> and <code>Soda</code> use ML to detect <span class="hl4" style="color:var(--accent4)">distribution shifts</span> — when row counts drop 40%, when a column's mean drifts, or when fresh data stops arriving.</p>
-      </div>
-      <div class="quiz-box">
-        <h4>🧠 Quick Check</h4>
-        <p>You find that 15% of rows in your orders table have NULL customer_id. Which quality dimension is violated and what should you check?</p>
-        <button class="show-btn" onclick="showAns(this)">Show Answer</button>
-        <div class="quiz-answer">Completeness is violated. Investigate: upstream ingestion bug? CDC missed events? Source system allowing NULLs? Add a not_null expectation in dbt tests or Great Expectations to catch this going forward.</div>
-      </div>
-    </div>
-  </div>
+    <footer>
+        <p>© 2024 Data Management Mastery Course. Comprehensive training for data professionals.</p>
+    </footer>
 
-  <!-- CHAPTER 7: Lineage -->
-  <div class="chapter">
-    <div class="chapter-header" onclick="toggle(this)">
-      <div class="chapter-icon" style="background:rgba(255,107,107,0.1)">🔍</div>
-      <div class="chapter-info">
-        <div class="chapter-num">Chapter 7 · 15 min</div>
-        <div class="chapter-title">Data Lineage & Observability</div>
-      </div>
-      <div class="chapter-toggle">▼</div>
-    </div>
-    <div class="chapter-body">
-      <div class="prose">
-        <p>Lineage tracks the <span class="hl" style="color:var(--accent4)">provenance</span> of data — every transformation it went through. Critical for debugging broken dashboards and for compliance.</p>
-      </div>
-      <div class="diagram">
-        <div class="diagram-title">🔗 Column-Level Lineage Example</div>
-        <div class="flow">
-          <div class="flow-node">CRM DB<br/><small>customers.name</small></div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="color:var(--accent2)">stg_customers<br/><small>full_name</small></div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="color:var(--accent3)">int_orders<br/><small>customer_name</small></div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-node" style="color:var(--accent1)">revenue_report<br/><small>name column</small></div>
-        </div>
-        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-top:14px;text-align:center">
-          If CRM schema changes → trace impact instantly through all downstream tables
-        </div>
-      </div>
-      <div class="prose">
-        <h3>Observability vs Monitoring</h3>
-        <ul>
-          <li><strong>Monitoring:</strong> Known metrics, thresholds (row count &gt; 0)</li>
-          <li><strong>Observability:</strong> Unknown unknowns — ML detects anomalies you didn't anticipate</li>
-        </ul>
-        <h3>The 5 Pillars of Data Observability</h3>
-        <ul>
-          <li><strong>Freshness:</strong> When was the table last updated?</li>
-          <li><strong>Volume:</strong> Expected row count in range?</li>
-          <li><strong>Schema:</strong> Did column types change?</li>
-          <li><strong>Distribution:</strong> Value ranges shifted?</li>
-          <li><strong>Lineage:</strong> Upstream tables healthy?</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+    <script>
+        const courseData = [
+            {
+                day: 1,
+                title: "Data Fundamentals",
+                subtitle: "Understanding the core concepts",
+                readTime: 15,
+                topics: ["Data types", "Data sources", "Data quality", "Metadata basics", "Data lifecycle", "Storage concepts", "Data vs Information", "Structured data"],
+                content: `
+                    <div class="content-section">
+                        <div class="section-title">Introduction to Data</div>
+                        <div class="section-content">
+                            Data is the raw material of information. At its core, data represents facts, observations, or measurements that have been collected and recorded. Understanding what constitutes data and how it differs from information is fundamental to data management. Data becomes information only when it's processed, organized, and contextualized in a way that provides meaning and insight to users or systems. This distinction is critical because data management focuses on the collection, storage, and maintenance of raw data, while data analysis and business intelligence focus on transforming that data into actionable information.
+                        </div>
+                    </div>
 
-  <!-- CHAPTER 8: Security -->
-  <div class="chapter">
-    <div class="chapter-header" onclick="toggle(this)">
-      <div class="chapter-icon" style="background:rgba(255,107,107,0.1)">🔐</div>
-      <div class="chapter-info">
-        <div class="chapter-num">Chapter 8 · 12 min</div>
-        <div class="chapter-title">Data Security & Access Control</div>
-      </div>
-      <div class="chapter-toggle">▼</div>
-    </div>
-    <div class="chapter-body">
-      <div class="concept-grid">
-        <div class="concept-card">
-          <h4 style="color:var(--accent4)">RBAC</h4>
-          <p>Role-Based Access Control. Grant roles (analyst, engineer) not individuals.</p>
-        </div>
-        <div class="concept-card">
-          <h4 style="color:var(--accent4)">Column Masking</h4>
-          <p>Show SSN as ***-**-1234 to unauthorised users. Supported in Snowflake, BigQuery.</p>
-        </div>
-        <div class="concept-card">
-          <h4 style="color:var(--accent4)">Row-Level Security</h4>
-          <p>User X can only see rows where region = 'India'. Enforced by the warehouse.</p>
-        </div>
-        <div class="concept-card">
-          <h4 style="color:var(--accent4)">Encryption</h4>
-          <p>At-rest (AES-256) and in-transit (TLS). Cloud providers handle most of this.</p>
-        </div>
-        <div class="concept-card">
-          <h4 style="color:var(--accent4)">Audit Logging</h4>
-          <p>Record who queried what, when. Required for SOC2, HIPAA, GDPR compliance.</p>
-        </div>
-        <div class="concept-card">
-          <h4 style="color:var(--accent4)">Tokenisation</h4>
-          <p>Replace sensitive values with tokens. Original value stored in a vault, not the warehouse.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+                    <div class="highlight">
+                        <strong>Key Insight:</strong> Data is plural—multiple data points collected become a dataset. The value of data emerges not from individual points, but from patterns, correlations, and relationships discovered through systematic analysis.
+                    </div>
 
-<!-- ═══════════════════════ DAY 5 ═══════════════════════ -->
-<section class="day-section" id="day5">
-  <div class="day-header">
-    <div class="day-number" style="color:var(--day5)">05</div>
-    <div class="day-meta">
-      <div class="day-tag" style="color:var(--day5);border-color:rgba(192,132,252,0.3);background:rgba(192,132,252,0.07)">Day 5 of 5</div>
-      <div class="day-title">Serving, Governance & Lifecycle</div>
-      <div class="day-time">⏱ 45 min &nbsp;|&nbsp; Chapters 9, 10 & 11</div>
-    </div>
-  </div>
-  <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--day5)"></div></div>
+                    <div class="content-section">
+                        <div class="section-title">Types of Data</div>
+                        <div class="section-content">
+                            Data comes in various forms, each with unique characteristics and management requirements. <strong>Structured data</strong> follows a predefined format and schema, organized in tables with rows and columns like databases and spreadsheets. It's easily searchable and analyzable but less flexible. <strong>Unstructured data</strong> lacks a predefined format—think text documents, images, videos, and audio files. This type of data is flexible but difficult to process automatically. <strong>Semi-structured data</strong> has some organizational properties but doesn't fit neatly into structured formats; JSON, XML, and log files are common examples. Understanding these distinctions helps data managers choose appropriate storage, processing, and retrieval strategies.
+                        </div>
+                    </div>
 
-  <!-- CHAPTER 9: Governance -->
-  <div class="chapter open">
-    <div class="chapter-header" onclick="toggle(this)">
-      <div class="chapter-icon" style="background:rgba(192,132,252,0.1)">⚖️</div>
-      <div class="chapter-info">
-        <div class="chapter-num">Chapter 9 · 15 min</div>
-        <div class="chapter-title">Data Governance — Policies & Stewardship</div>
-      </div>
-      <div class="chapter-toggle">▼</div>
-    </div>
-    <div class="chapter-body">
-      <div class="prose">
-        <p>Governance is the <span class="hl" style="color:var(--accent5)">system of accountability</span> over data assets. It's not a tool — it's people, processes, and policies.</p>
-        <h3>Core Elements</h3>
-      </div>
-      <div class="diagram">
-        <div class="diagram-title">🏛️ Data Governance Framework</div>
-        <div class="stack">
-          <div class="stack-layer" style="background:rgba(192,132,252,0.15);border:1px solid rgba(192,132,252,0.3)">
-            <div class="stack-dot" style="background:var(--accent5)"></div>
-            <div><strong>Data Council</strong> — executive oversight, priority setting</div>
-          </div>
-          <div class="stack-layer" style="background:rgba(123,140,255,0.1);border:1px solid rgba(123,140,255,0.2)">
-            <div class="stack-dot" style="background:var(--accent3)"></div>
-            <div><strong>Data Owners</strong> — domain leaders responsible for datasets</div>
-          </div>
-          <div class="stack-layer" style="background:rgba(79,240,176,0.1);border:1px solid rgba(79,240,176,0.2)">
-            <div class="stack-dot" style="background:var(--accent1)"></div>
-            <div><strong>Data Stewards</strong> — day-to-day quality and definition management</div>
-          </div>
-          <div class="stack-layer" style="background:rgba(247,201,72,0.08);border:1px solid rgba(247,201,72,0.2)">
-            <div class="stack-dot" style="background:var(--accent2)"></div>
-            <div><strong>Data Engineers</strong> — technical implementation of policies</div>
-          </div>
-          <div class="stack-layer" style="background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.2)">
-            <div class="stack-dot" style="background:var(--accent4)"></div>
-            <div><strong>Data Consumers</strong> — analysts, scientists, product managers</div>
-          </div>
-        </div>
-      </div>
-      <div class="prose">
-        <h3>Compliance Frameworks</h3>
-        <ul>
-          <li><strong>GDPR:</strong> EU regulation — right to erasure, consent management</li>
-          <li><strong>CCPA:</strong> California — consumer data rights</li>
-          <li><strong>HIPAA:</strong> US healthcare — PHI protection</li>
-          <li><strong>SOC 2:</strong> Trust criteria for SaaS — audit trails, access logs</li>
-        </ul>
-        <h3>Data Classification</h3>
-        <p>Classify data by sensitivity: <span class="hl" style="color:var(--accent4)">Public → Internal → Confidential → Restricted</span>. Access controls, retention, and encryption tighten at each level.</p>
-      </div>
-    </div>
-  </div>
+                    <div class="key-points">
+                        <div class="key-point">
+                            <div class="key-point-title">Structured Data</div>
+                            <div class="key-point-content">Databases, spreadsheets, CRM systems. Highly organized, schema-driven, easily indexed and searched.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Unstructured Data</div>
+                            <div class="key-point-content">Images, videos, text, documents. Requires specialized tools for extraction and analysis.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Semi-Structured Data</div>
+                            <div class="key-point-content">JSON, XML, logs. Flexible schema with some organizational hierarchy.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Big Data</div>
+                            <div class="key-point-content">High volume, velocity, and variety. Requires distributed processing frameworks.</div>
+                        </div>
+                    </div>
 
-  <!-- CHAPTER 10: Serving -->
-  <div class="chapter">
-    <div class="chapter-header" onclick="toggle(this)">
-      <div class="chapter-icon" style="background:rgba(192,132,252,0.1)">📊</div>
-      <div class="chapter-info">
-        <div class="chapter-num">Chapter 10 · 15 min</div>
-        <div class="chapter-title">Data Serving & Consumption</div>
-      </div>
-      <div class="chapter-toggle">▼</div>
-    </div>
-    <div class="chapter-body">
-      <div class="diagram">
-        <div class="diagram-title">🌐 Data Serving Architecture</div>
-        <div style="text-align:center;margin-bottom:16px;">
-          <div class="flow-node" style="display:inline-block;color:var(--accent5);border-color:rgba(192,132,252,0.4);min-width:200px">🏛️ Data Warehouse / Lakehouse</div>
-        </div>
-        <div style="text-align:center;color:var(--muted);margin-bottom:8px">↓ &nbsp; Semantic Layer (dbt Metrics / Looker LookML) &nbsp; ↓</div>
-        <div class="arch-grid" style="max-width:600px;margin:0 auto">
-          <div class="arch-box" style="border-color:rgba(79,240,176,0.3)"><div class="arch-icon">📊</div>BI Tools<br/><small style="color:var(--muted)">Tableau, Looker</small></div>
-          <div class="arch-box" style="border-color:rgba(247,201,72,0.3)"><div class="arch-icon">🤖</div>ML Platform<br/><small style="color:var(--muted)">Feature Store</small></div>
-          <div class="arch-box" style="border-color:rgba(123,140,255,0.3)"><div class="arch-icon">🔌</div>Data API<br/><small style="color:var(--muted)">REST / GraphQL</small></div>
-          <div class="arch-box" style="border-color:rgba(255,107,107,0.3)"><div class="arch-icon">↩️</div>Reverse ETL<br/><small style="color:var(--muted)">→ CRM/Ads</small></div>
-        </div>
-      </div>
-      <div class="prose">
-        <h3>Semantic Layer</h3>
-        <p>A semantic layer sits between the warehouse and BI tools. It defines business metrics <span class="hl" style="color:var(--accent5)">once</span> — "revenue = sum(amount) where status='paid'" — so every tool shows the same number.</p>
-        <h3>Feature Stores</h3>
-        <p>For ML teams, a feature store (Feast, Tecton) serves precomputed features to models. It solves the <span class="hl" style="color:var(--accent5)">training-serving skew</span> problem — the same feature logic runs in batch (training) and real-time (inference).</p>
-        <h3>Reverse ETL</h3>
-        <p>Moving data <em>back</em> from the warehouse into operational tools. Example: sync a "churn risk score" from BigQuery → Salesforce so the sales team acts on it without opening another tool. Tools: Census, Hightouch.</p>
-      </div>
-    </div>
-  </div>
+                    <div class="content-section">
+                        <div class="section-title">Data Sources and Quality</div>
+                        <div class="section-content">
+                            Data originates from numerous sources: transactional systems, sensors, user interactions, APIs, third-party providers, and more. The quality of your data directly impacts the quality of insights you can derive. Data quality encompasses several dimensions: accuracy (data represents true values), completeness (no missing values), consistency (uniform formats across datasets), timeliness (current and up-to-date), and validity (conforms to required formats). Poor data quality can lead to incorrect business decisions, system failures, and wasted resources. Implementing data quality checks at the point of entry and maintaining them throughout the data lifecycle is essential for data management success.
+                        </div>
+                    </div>
 
-  <!-- CHAPTER 11: Lifecycle & Archival -->
-  <div class="chapter">
-    <div class="chapter-header" onclick="toggle(this)">
-      <div class="chapter-icon" style="background:rgba(192,132,252,0.1)">♻️</div>
-      <div class="chapter-info">
-        <div class="chapter-num">Chapter 11 · 15 min</div>
-        <div class="chapter-title">Data Lifecycle Management & Archival</div>
-      </div>
-      <div class="chapter-toggle">▼</div>
-    </div>
-    <div class="chapter-body">
-      <div class="diagram">
-        <div class="diagram-title">🌡️ Data Temperature Model</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <div style="flex:1;min-width:120px;background:linear-gradient(135deg,rgba(255,107,107,0.2),rgba(247,201,72,0.1));border:1px solid rgba(255,107,107,0.3);border-radius:8px;padding:16px;text-align:center">
-            <div style="font-size:28px">🔥</div>
-            <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent4);margin:4px 0">Hot</div>
-            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Daily active tables<br/>SSD / in-memory<br/>Highest cost</div>
-          </div>
-          <div style="flex:1;min-width:120px;background:linear-gradient(135deg,rgba(123,140,255,0.2),rgba(79,240,176,0.05));border:1px solid rgba(123,140,255,0.3);border-radius:8px;padding:16px;text-align:center">
-            <div style="font-size:28px">🌡️</div>
-            <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent3);margin:4px 0">Warm</div>
-            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Monthly queries<br/>HDD / S3 Standard<br/>Medium cost</div>
-          </div>
-          <div style="flex:1;min-width:120px;background:linear-gradient(135deg,rgba(79,240,176,0.1),rgba(30,39,64,0.3));border:1px solid rgba(79,240,176,0.2);border-radius:8px;padding:16px;text-align:center">
-            <div style="font-size:28px">🧊</div>
-            <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent1);margin:4px 0">Cold</div>
-            <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">Compliance archive<br/>S3 Glacier<br/>Lowest cost</div>
-          </div>
-        </div>
-      </div>
-      <div class="prose">
-        <h3>Lifecycle Policies</h3>
-        <ul>
-          <li><strong>Retention:</strong> How long to keep data (GDPR requires deletion of PII after purpose)</li>
-          <li><strong>Tiering:</strong> Auto-move data from hot → warm → cold based on access patterns</li>
-          <li><strong>Deletion / Right to Erasure:</strong> Ability to delete a user's data across all tables</li>
-          <li><strong>Versioning:</strong> Time-travel in Delta Lake / Iceberg — query data as of any past point</li>
-        </ul>
-        <h3>Cloud Storage Tiers (AWS)</h3>
-        <ul>
-          <li><code>S3 Standard</code> — Hot. Immediate access. ~$23/TB/month</li>
-          <li><code>S3 Infrequent Access</code> — Warm. ~$12.5/TB/month</li>
-          <li><code>S3 Glacier Instant</code> — Cold archive, millisecond retrieval. ~$4/TB/month</li>
-          <li><code>S3 Glacier Deep Archive</code> — Coldest. 12-hour retrieval. ~$1/TB/month</li>
-        </ul>
-      </div>
-      <div class="quiz-box">
-        <h4>🧠 Final Review</h4>
-        <p>A GDPR request comes in: "Delete all data about user ID 12345." Walk through which data management components are involved.</p>
-        <button class="show-btn" onclick="showAns(this)">Show Answer</button>
-        <div class="quiz-answer">1. Catalog — locate all tables containing user 12345 data. 2. Lineage — find all derived tables downstream. 3. Governance — validate the deletion request meets policy. 4. Security / Access — confirm requester is authorised. 5. Lifecycle — trigger deletion across hot, warm, cold tiers. 6. Quality — verify post-deletion that no orphaned records remain. All 11 components touched in one request!</div>
-      </div>
-    </div>
-  </div>
+                    <div class="content-section">
+                        <div class="section-title">Metadata: Data About Data</div>
+                        <div class="section-content">
+                            Metadata provides context for your data. It describes the characteristics, properties, and relationships of data. Examples include field names, data types, descriptions, ownership information, creation dates, and version numbers. Maintaining comprehensive metadata is crucial for data discoverability, lineage tracking, and governance. Without metadata, teams waste time understanding what data exists, where it lives, and how it can be used safely.
+                        </div>
+                    </div>
 
-  <!-- FINAL ARCHITECTURE -->
-  <div style="margin-top:48px;padding:32px;background:var(--surface);border:1px solid var(--border);border-radius:12px;">
-    <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:20px">🏆 Complete Architecture — All 11 Components</div>
-    <div class="flow" style="flex-wrap:wrap;gap:6px;justify-content:center">
-      <div class="flow-node" style="color:var(--day1);border-color:rgba(79,240,176,0.3)">①<br/>Ingestion</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="color:var(--day2);border-color:rgba(247,201,72,0.3)">②<br/>Storage</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="color:var(--day3);border-color:rgba(123,140,255,0.3)">③<br/>Integration</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="color:var(--day2);border-color:rgba(247,201,72,0.3)">④<br/>Modeling</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="color:var(--day4);border-color:rgba(255,107,107,0.3)">⑤<br/>Quality</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="color:var(--day3);border-color:rgba(123,140,255,0.3)">⑥<br/>Catalog</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="color:var(--day5);border-color:rgba(192,132,252,0.3)">⑦<br/>Governance</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="color:var(--day4);border-color:rgba(255,107,107,0.3)">⑧<br/>Lineage</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="color:var(--day4);border-color:rgba(255,107,107,0.3)">⑨<br/>Security</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="color:var(--day5);border-color:rgba(192,132,252,0.3)">⑩<br/>Serving</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="color:var(--day5);border-color:rgba(192,132,252,0.3)">⑪<br/>Lifecycle</div>
-    </div>
-  </div>
-</section>
+                    <div class="highlight">
+                        <strong>Remember:</strong> Metadata is as important as the data itself. A well-catalogued dataset with poor metadata is nearly useless; a small dataset with excellent metadata becomes a valuable asset.
+                    </div>
+                `
+            },
+            {
+                day: 2,
+                title: "Data Architecture & Design",
+                subtitle: "Building the foundation",
+                readTime: 15,
+                topics: ["Database design", "ER diagrams", "Normalization", "Schemas", "Data warehouses", "Data lakes", "OLTP vs OLAP", "System design"],
+                content: `
+                    <div class="content-section">
+                        <div class="section-title">Data Architecture Overview</div>
+                        <div class="section-content">
+                            Data architecture is the blueprint for how data flows through an organization. It encompasses the systems, platforms, processes, and frameworks used to collect, store, process, and deliver data. A well-designed architecture ensures data accessibility, security, scalability, and performance. It must balance competing requirements: speed vs. accuracy, flexibility vs. consistency, and cost vs. capability. Enterprise data architectures typically include operational systems (transactional databases), analytical systems (data warehouses and lakes), integration platforms, and analytics tools all working in concert.
+                        </div>
+                    </div>
 
-</div><!-- /container -->
+                    <div class="content-section">
+                        <div class="section-title">Database Design Fundamentals</div>
+                        <div class="section-content">
+                            Proper database design is fundamental to data management. Entity-Relationship (ER) modeling helps visualize data structure by identifying entities (things you want to store data about), their attributes (properties), and relationships between them. Normalization is the process of organizing database schema to reduce redundancy and improve data integrity. There are multiple normal forms (1NF through 3NF being most common), each with specific rules about how data should be organized. While normalization reduces redundancy, sometimes controlled denormalization is used to improve query performance. The choice between normalization levels depends on your specific use case—transactional systems typically need higher normalization, while analytical systems may accept more redundancy for faster queries.
+                        </div>
+                    </div>
 
-<footer>
-  <div>Data Management Mastery Course · Built for Engineering & Analytics Learners</div>
-  <div style="margin-top:8px">Deploy free forever on <a href="https://pages.github.com" target="_blank">GitHub Pages</a>, <a href="https://netlify.com" target="_blank">Netlify</a>, or <a href="https://vercel.com" target="_blank">Vercel</a></div>
-</footer>
+                    <div class="key-points">
+                        <div class="key-point">
+                            <div class="key-point-title">First Normal Form (1NF)</div>
+                            <div class="key-point-content">Eliminate repeating groups. Each field contains atomic (indivisible) values.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Second Normal Form (2NF)</div>
+                            <div class="key-point-content">Remove partial dependencies. Non-key attributes must depend on entire primary key.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Third Normal Form (3NF)</div>
+                            <div class="key-point-content">Remove transitive dependencies. Non-key attributes depend only on primary key.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Denormalization</div>
+                            <div class="key-point-content">Controlled redundancy for performance, common in analytics and data warehouses.</div>
+                        </div>
+                    </div>
 
-<script>
-  function toggle(header) {
-    const chapter = header.parentElement;
-    chapter.classList.toggle('open');
-  }
-  function showAns(btn) {
-    const ans = btn.nextElementSibling;
-    ans.style.display = ans.style.display === 'block' ? 'none' : 'block';
-    btn.textContent = ans.style.display === 'block' ? 'Hide Answer' : 'Show Answer';
-  }
-  // Highlight active nav tab on scroll
-  const sections = document.querySelectorAll('.day-section');
-  const tabs = document.querySelectorAll('.nav-tab');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        tabs.forEach(t => t.classList.remove('active'));
-        const active = document.querySelector(`.nav-tab[href="#${entry.target.id}"]`);
-        if (active) active.classList.add('active');
-      }
-    });
-  }, { threshold: 0.3 });
-  sections.forEach(s => observer.observe(s));
-</script>
+                    <div class="content-section">
+                        <div class="section-title">Data Warehouses vs Data Lakes</div>
+                        <div class="section-content">
+                            A <strong>data warehouse</strong> is a structured, integrated repository optimized for analytical queries. Data is extracted from operational systems, transformed to conform to a schema, and loaded into the warehouse. This ETL process ensures consistency and quality, making data warehouses reliable for critical business reporting. However, this process can be time-consuming and inflexible. A <strong>data lake</strong> is a larger repository that stores raw data in native formats without predefined structure. Data lakes offer flexibility and can accommodate diverse data types, but require strong governance to prevent becoming "data swamps" where data quality and lineage are unclear. Modern architectures often combine both: a data lake for raw data storage and exploration, with data marts (smaller warehouses) for specific business functions.
+                        </div>
+                    </div>
+
+                    <div class="highlight">
+                        <strong>OLTP vs OLAP:</strong> OLTP (Online Transaction Processing) systems are optimized for frequent, small updates—think banking transactions. OLAP (Online Analytical Processing) systems are optimized for complex queries over large datasets—think business intelligence. These require different architectural approaches.
+                    </div>
+                `
+            },
+            {
+                day: 3,
+                title: "Data Integration & ETL",
+                subtitle: "Moving data efficiently",
+                readTime: 15,
+                topics: ["ETL processes", "Data pipelines", "Data transformation", "API integration", "Data validation", "Error handling", "Scheduling", "Data matching"],
+                content: `
+                    <div class="content-section">
+                        <div class="section-title">Understanding ETL</div>
+                        <div class="section-content">
+                            ETL stands for Extract, Transform, Load. It's the process of moving data from source systems into a target system (typically a data warehouse or lake). <strong>Extract</strong> involves reading data from various source systems—databases, APIs, files, web services, etc. This must be done in a way that doesn't disrupt operational systems. <strong>Transform</strong> involves cleaning, validating, enriching, and reshaping data to meet business requirements and ensure consistency. Transformations might include standardizing date formats, converting currencies, removing duplicates, or calculating new fields. <strong>Load</strong> involves moving the processed data into the target system. Modern ETL tools have evolved to support streaming and incremental loads rather than just batch processing, allowing for near-real-time data availability.
+                        </div>
+                    </div>
+
+                    <div class="highlight">
+                        <strong>ELT Alternative:</strong> Extract, Load, Transform (ELT) is an emerging pattern where raw data is loaded first, then transformed in the target system. This approach leverages powerful cloud computing resources and is more flexible, though it requires robust data lake governance.
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Data Transformation Techniques</div>
+                        <div class="section-content">
+                            Transformation is where raw data becomes valuable. Common transformations include data cleaning (handling nulls, outliers, inconsistencies), standardization (consistent formats, units, naming conventions), enrichment (adding external data), aggregation (summarizing data), and joining (combining data from multiple sources). Mapping transformation rules ensures consistency across your organization. For example, standardizing customer names, converting all currencies to a single denomination, or parsing complex nested data structures. The complexity of transformations depends on data quality at the source—poor source data quality means more transformation effort is needed downstream.
+                        </div>
+                    </div>
+
+                    <div class="key-points">
+                        <div class="key-point">
+                            <div class="key-point-title">Data Profiling</div>
+                            <div class="key-point-content">Analyze data characteristics to understand quality issues and inform transformation rules.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Data Validation</div>
+                            <div class="key-point-content">Verify data meets defined rules and constraints before and after transformation.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Error Handling</div>
+                            <div class="key-point-content">Log, track, and remediate data quality issues systematically.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Data Lineage</div>
+                            <div class="key-point-content">Track data flow from source to destination, understanding all transformations applied.</div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">ETL Tools and Platforms</div>
+                        <div class="section-content">
+                            Various tools facilitate ETL work: Talend, Apache Airflow, AWS Glue, Azure Data Factory, Informatica, and open-source tools like Apache NiFi. Your choice depends on organizational needs, budget, existing infrastructure, and team expertise. Cloud-based solutions offer scalability and reduced infrastructure management. Open-source solutions provide flexibility and cost savings but require more operational overhead. Regardless of tool choice, ETL processes should be monitored for performance, data quality, and failures. Automated alerting when pipelines fail is critical for maintaining data freshness and reliability.
+                        </div>
+                    </div>
+                `
+            },
+            {
+                day: 4,
+                title: "Data Storage & Databases",
+                subtitle: "Choosing the right database",
+                readTime: 15,
+                topics: ["Relational databases", "NoSQL databases", "Document stores", "Graph databases", "Time-series DB", "Indexing", "Query optimization", "Backup & recovery"],
+                content: `
+                    <div class="content-section">
+                        <div class="section-title">Database Types and Paradigms</div>
+                        <div class="section-content">
+                            Different data and use cases require different database types. <strong>Relational databases</strong> (SQL) use structured schemas with tables, relationships, and ACID transactions. They excel at complex queries with joins and are best for transactional systems. PostgreSQL, MySQL, Oracle, and SQL Server are popular examples. <strong>NoSQL databases</strong> prioritize flexibility and scalability over strict consistency. They include document stores (MongoDB), key-value stores (Redis, DynamoDB), column-family stores (HBase, Cassandra), and graph databases (Neo4j). Each NoSQL type has different strengths—document stores are flexible, key-value stores are fast, column-family stores handle big data, and graph databases excel at relationships. Choosing between relational and NoSQL isn't about one being "better"—it's about matching the database to your data model and access patterns.
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Relational vs NoSQL Trade-offs</div>
+                        <div class="section-content">
+                            Relational databases enforce schema consistency and referential integrity. This prevents invalid data but requires schema changes when requirements evolve. NoSQL databases are schema-flexible—each document can have different fields. This flexibility supports rapid development but requires application-level validation. Relational databases provide ACID compliance (Atomicity, Consistency, Isolation, Durability), guaranteeing data reliability. NoSQL databases typically offer BASE semantics (Basically Available, Soft state, Eventually consistent), trading immediate consistency for availability and partition tolerance. This distinction impacts what problems each database can solve. Financial systems need ACID guarantees; social media feeds can tolerate eventual consistency for massive scalability.
+                        </div>
+                    </div>
+
+                    <div class="key-points">
+                        <div class="key-point">
+                            <div class="key-point-title">ACID Properties</div>
+                            <div class="key-point-content">Atomicity, Consistency, Isolation, Durability. Essential for transactional integrity.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">BASE Properties</div>
+                            <div class="key-point-content">Basically Available, Soft state, Eventually Consistent. Prioritizes availability and partition tolerance.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Sharding & Replication</div>
+                            <div class="key-point-content">Horizontal scaling techniques for handling large datasets across multiple servers.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Indexing Strategies</div>
+                            <div class="key-point-content">B-tree, hash, bitmap indexes. Critical for query performance optimization.</div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Performance and Optimization</div>
+                        <div class="section-content">
+                            Database performance depends on many factors: query design, index strategy, data distribution, and hardware resources. Proper indexing can dramatically improve query speed, but indexes consume storage and slow down writes. Query optimization involves analyzing execution plans, understanding how the database engine processes queries, and rewriting queries for efficiency. Partitioning large tables improves query performance by limiting data scans. Caching frequently accessed data reduces database load. Monitoring query performance and identifying slow queries is essential for maintaining responsive systems. Regular maintenance tasks like index optimization, statistics updates, and disk space monitoring prevent performance degradation over time.
+                        </div>
+                    </div>
+                `
+            },
+            {
+                day: 5,
+                title: "Data Security & Privacy",
+                subtitle: "Protecting your data assets",
+                readTime: 15,
+                topics: ["Encryption", "Access control", "Authentication", "GDPR compliance", "Data masking", "Audit logging", "Vulnerability management", "Disaster recovery"],
+                content: `
+                    <div class="content-section">
+                        <div class="section-title">Data Security Fundamentals</div>
+                        <div class="section-content">
+                            Data security protects data from unauthorized access, modification, or destruction. It encompasses multiple layers: physical security (protecting hardware), network security (protecting data in transit), application security (securing code and logic), and database security (protecting stored data). The principle of least privilege dictates that users and systems should have only the minimum permissions necessary to perform their functions. Defense in depth uses multiple security layers so that even if one fails, others provide protection. Regular security audits, penetration testing, and vulnerability assessments identify weaknesses before they're exploited. Security is not a one-time effort but a continuous process of monitoring, updating, and improving defenses.
+                        </div>
+                    </div>
+
+                    <div class="highlight">
+                        <strong>Critical Principle:</strong> No single security measure is sufficient. Effective security combines technical controls, administrative policies, and user awareness into a comprehensive program.
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Encryption and Access Control</div>
+                        <div class="section-content">
+                            <strong>Encryption</strong> transforms readable data into unreadable form without an encryption key. Encryption in transit protects data as it moves between systems using TLS/SSL protocols. Encryption at rest protects stored data, making it unreadable even if someone gains unauthorized access to storage. End-to-end encryption ensures data is encrypted from source to destination with no point of compromise. <strong>Access control</strong> determines who can access what data and under what conditions. Role-Based Access Control (RBAC) assigns permissions to roles rather than individuals, simplifying management. Attribute-Based Access Control (ABAC) makes decisions based on user attributes, resource attributes, and environmental conditions. Multi-factor authentication (MFA) adds extra verification layers. Single Sign-On (SSO) provides convenient access across multiple systems while centralizing authentication.
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Regulatory Compliance</div>
+                        <div class="section-content">
+                            Regulations increasingly govern how organizations must handle data. GDPR (General Data Protection Regulation) applies to any organization processing personal data of EU residents, with strict requirements for consent, data rights, and breach notification. HIPAA (Health Insurance Portability and Accountability Act) governs healthcare data. CCPA (California Consumer Privacy Act) provides similar protections for California residents. Compliance isn't just about following rules—it's about building customer trust. Regulations typically require documentation of what data you collect, how you use it, how long you keep it, and how you protect it. They often grant individuals rights to access their data, correct errors, and request deletion. Data governance frameworks help organizations understand their compliance obligations and build systems to meet them.
+                        </div>
+                    </div>
+
+                    <div class="key-points">
+                        <div class="key-point">
+                            <div class="key-point-title">Data Masking</div>
+                            <div class="key-point-content">Obscure sensitive data while maintaining usability for testing and analysis.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Tokenization</div>
+                            <div class="key-point-content">Replace sensitive values with tokens, reducing storage of sensitive data.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Audit Logging</div>
+                            <div class="key-point-content">Record all data access and modifications for accountability and forensics.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Disaster Recovery</div>
+                            <div class="key-point-content">Backup, replication, and failover strategies ensure business continuity.</div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                day: 6,
+                title: "Data Quality Management",
+                subtitle: "Ensuring reliable data",
+                readTime: 15,
+                topics: ["Quality metrics", "Data profiling", "Data cleansing", "Deduplication", "Anomaly detection", "Data validation", "Master data", "Governance"],
+                content: `
+                    <div class="content-section">
+                        <div class="section-title">Defining Data Quality</div>
+                        <div class="section-content">
+                            Data quality is multidimensional. <strong>Accuracy</strong> means data correctly represents reality. Inaccurate data leads to wrong decisions. <strong>Completeness</strong> means all required data is present; missing data can skew analysis. <strong>Consistency</strong> means data formats and values are uniform across systems; inconsistency causes integration problems. <strong>Timeliness</strong> means data is current and up-to-date; stale data is misleading. <strong>Validity</strong> means data conforms to required formats and types; invalid data can break systems. <strong>Uniqueness</strong> ensures no unintended duplicates exist; duplicates inflate metrics and skew analysis. <strong>Conformity</strong> means data follows defined standards and specifications. Measuring and improving these dimensions requires systematic approaches and tools. Many organizations establish data quality metrics and track them over time, treating data quality as a key performance indicator.
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Data Profiling and Cleansing</div>
+                        <div class="section-content">
+                            <strong>Data profiling</strong> analyzes data to understand its characteristics: value distributions, patterns, anomalies, and quality issues. Profiling reveals the true nature of data, which often surprises data teams. You might discover that a field marked as required has 30% null values, or that a numeric field contains text in some records. Profiling reports guide cleansing efforts. <strong>Data cleansing</strong> corrects identified issues: fixing formatting inconsistencies, handling null values, removing duplicates, correcting typos, and validating against external data sources. Some cleansing is automated (standardizing formats), while some requires manual intervention (researching unclear entries). Cleansing can be expensive and time-consuming, so preventing dirty data at the source is more efficient than cleaning it later. This means validating data when it's entered into systems.
+                        </div>
+                    </div>
+
+                    <div class="key-points">
+                        <div class="key-point">
+                            <div class="key-point-title">Duplicate Detection</div>
+                            <div class="key-point-content">Fuzzy matching identifies near-duplicates despite variations in formatting.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Null Handling</div>
+                            <div class="key-point-content">Identify nulls, understand their cause, and apply appropriate handling strategies.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Outlier Detection</div>
+                            <div class="key-point-content">Identify unusual values that might indicate errors or interesting patterns.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Master Data Management</div>
+                            <div class="key-point-content">Maintain authoritative versions of critical data (customers, products, locations).</div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Data Quality Frameworks</div>
+                        <div class="section-content">
+                            Effective data quality management requires frameworks and tools. Many organizations implement Data Quality Management (DQM) programs that establish standards, measure quality, and drive continuous improvement. This includes establishing data quality policies, implementing automated quality checks, training staff on quality practices, and creating accountability for data quality. Some organizations establish Chief Data Officer roles with responsibility for data quality across the enterprise. Quality monitoring dashboards provide visibility into data health. Setting realistic quality targets (100% is rarely achievable or cost-effective) allows organizations to focus improvement efforts where they matter most.
+                        </div>
+                    </div>
+                `
+            },
+            {
+                day: 7,
+                title: "Analytics & Business Intelligence",
+                subtitle: "Turning data into insights",
+                readTime: 15,
+                topics: ["BI tools", "Dashboards", "Reporting", "Data visualization", "KPIs", "Dimensional modeling", "Metrics calculation", "Analytics platforms"],
+                content: `
+                    <div class="content-section">
+                        <div class="section-title">From Data to Insights</div>
+                        <div class="section-content">
+                            Business Intelligence (BI) transforms raw data into actionable insights. While data management focuses on storing and maintaining data, BI focuses on using that data to answer business questions. The BI process involves understanding business questions, identifying relevant data sources, creating models that connect data to business logic, and presenting findings in understandable formats. Good BI goes beyond reporting historical data to include forecasting future trends and simulating scenarios. Self-service BI empowers business users to explore data themselves rather than waiting for analysts to run queries. However, self-service requires good data governance and quality to prevent users from drawing incorrect conclusions.
+                        </div>
+                    </div>
+
+                    <div class="highlight">
+                        <strong>The Insight Journey:</strong> Data → Information (context) → Insight (actionable understanding) → Action (business decisions). Each step adds value.
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Dashboards and Visualization</div>
+                        <div class="section-content">
+                            Dashboards consolidate key metrics and visualizations into single views, enabling quick understanding of business performance. Effective dashboards are focused (showing only what matters), actionable (enabling decisions), and current (with fresh data). Dashboard design matters—poorly designed dashboards overwhelm users with information; well-designed dashboards guide attention to important insights. Common visualization types include line charts (trends over time), bar charts (comparisons between categories), pie charts (part-to-whole relationships), scatter plots (correlations), and heat maps (multi-dimensional patterns). Choosing the right chart type depends on your data and story you're telling. Tools like Tableau, Power BI, Looker, and Qlik enable rapid dashboard creation. Mobile dashboards provide on-the-go access to key metrics. Alerts automatically notify stakeholders when metrics reach thresholds.
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Dimensional Modeling</div>
+                        <div class="section-content">
+                            Dimensional modeling is a design approach that structures data warehouses for analytics. It uses fact tables (containing measurable events and metrics) and dimension tables (containing descriptive attributes). For example, a sales fact table might contain purchase amount, quantity, and date, while dimension tables contain customer details, product information, and location information. This structure enables flexible analysis—you can easily slice and dice metrics by customer, product, location, or time. Slowly changing dimensions handle cases where dimension attributes change over time (a customer's address, a product's category). Conformed dimensions ensure the same dimension is used consistently across multiple fact tables, enabling cross-functional analysis. Well-designed dimensional models enable fast queries and intuitive analysis.
+                        </div>
+                    </div>
+
+                    <div class="key-points">
+                        <div class="key-point">
+                            <div class="key-point-title">KPIs</div>
+                            <div class="key-point-content">Key Performance Indicators aligned with business strategy, measured and tracked consistently.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Metrics vs Dimensions</div>
+                            <div class="key-point-content">Metrics are measurable values; dimensions are attributes used to group and filter metrics.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Drill-Down Analysis</div>
+                            <div class="key-point-content">Navigate from high-level summaries to detailed data for root cause analysis.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Ad-Hoc Reporting</div>
+                            <div class="key-point-content">Enable users to create custom reports for specific questions without IT involvement.</div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                day: 8,
+                title: "Advanced Topics: Big Data & Cloud",
+                subtitle: "Scaling for the future",
+                readTime: 15,
+                topics: ["Distributed systems", "MapReduce", "Spark", "Hadoop", "Cloud platforms", "Data lakes", "Stream processing", "Scalability patterns"],
+                content: `
+                    <div class="content-section">
+                        <div class="section-title">Big Data Challenges and Solutions</div>
+                        <div class="section-content">
+                            Big Data is characterized by volume (massive amounts of data), velocity (high rate of data generation), and variety (diverse data types and formats). Traditional database systems struggle with big data for three reasons: storage capacity, processing speed, and handling diverse data types. Distributed computing solves these by breaking work across many machines. <strong>Hadoop</strong> is an open-source framework that enables distributed processing of large datasets across clusters of computers. <strong>MapReduce</strong> is Hadoop's processing model: Map functions process input data in parallel, shuffle and sort intermediate results, then Reduce functions aggregate results. This approach is powerful for batch processing but slow for interactive queries. <strong>Apache Spark</strong> improves on MapReduce with in-memory computing, enabling faster iterations and interactive analysis. Spark supports SQL queries, machine learning libraries, and streaming data processing.
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Cloud Data Platforms</div>
+                        <div class="section-content">
+                            Cloud platforms (AWS, Google Cloud, Azure) offer data services eliminating infrastructure management. AWS offers EC2 (compute), S3 (storage), Redshift (data warehouse), and Glue (ETL). Google Cloud provides BigQuery (data warehouse), Dataflow (ETL), and Bigtable (NoSQL). Azure offers Synapse (data warehouse), Data Lake Storage, and Databricks (Spark). Cloud advantages include scalability (pay for what you use), reliability (built-in redundancy and backups), and reduced IT overhead. However, cloud requires different thinking about architecture—you can't optimize for single-machine resources. Multi-cloud strategies reduce vendor lock-in but complicate operations. Data governance becomes more important in cloud environments where data spreads across multiple services and accounts.
+                        </div>
+                    </div>
+
+                    <div class="key-points">
+                        <div class="key-point">
+                            <div class="key-point-title">Stream Processing</div>
+                            <div class="key-point-content">Process continuous data streams in real-time (Kafka, Flink, Storm).</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Data Partitioning</div>
+                            <div class="key-point-content">Distribute data across nodes by key, enabling parallel processing.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Consistency Models</div>
+                            <div class="key-point-content">Strong vs eventual consistency trade-offs in distributed systems.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Fault Tolerance</div>
+                            <div class="key-point-content">Recover from node failures without data loss or service interruption.</div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Data Lakes and Modern Architectures</div>
+                        <div class="section-content">
+                            Modern data platforms often combine data lakes with data warehouses: raw data lands in data lakes (S3, ADLS, GCS), gets processed, and materialized into warehouses for analytics. Medallion architecture (bronze, silver, gold layers) organizes data lake processing: bronze stores raw data, silver contains cleaned/validated data, gold contains business-ready data. This layered approach provides flexibility while maintaining quality. Lakehouse architecture bridges data lakes and warehouses, enabling both analytical flexibility and structured analytics in a single platform (Delta Lake, Apache Iceberg). These modern architectures require strong data governance and lineage tracking to prevent data lakes from becoming data swamps.
+                        </div>
+                    </div>
+                `
+            },
+            {
+                day: 9,
+                title: "Data Governance & Compliance",
+                subtitle: "Managing data as an asset",
+                readTime: 15,
+                topics: ["Data governance framework", "Data stewardship", "Metadata management", "Data cataloging", "Policy enforcement", "Lineage tracking", "Cost optimization", "Organizational structure"],
+                content: `
+                    <div class="content-section">
+                        <div class="section-title">Data Governance Overview</div>
+                        <div class="section-content">
+                            Data governance establishes organizational structures, policies, and processes to manage data assets effectively. It answers fundamental questions: Who owns data? How should it be used? How long should it be kept? What access is allowed? Good governance doesn't prevent data use—it enables controlled use that's compliant, secure, and trustworthy. Governance requires executive sponsorship, clear roles and responsibilities, documented policies, and enforcement mechanisms. Without governance, data proliferates chaotically: multiple versions of truth, inconsistent definitions, unauthorized access, and compliance violations. Strong governance creates a data-driven culture where decisions are based on reliable, consistent data and people know how to find and use data properly.
+                        </div>
+                    </div>
+
+                    <div class="highlight">
+                        <strong>Data as an Asset:</strong> Organizations should treat data with the same rigor as financial assets. Track data value, manage data portfolios, and optimize data investments.
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Governance Structure and Stewardship</div>
+                        <div class="section-content">
+                            Effective governance organizations have clear roles: <strong>Data owners</strong> (usually business leaders) have ultimate responsibility for data asset usage and quality. <strong>Data stewards</strong> (usually business or operations people) maintain data quality, document business rules, and manage data access. <strong>Data custodians</strong> (usually IT) manage technical infrastructure, security, and backup. <strong>Data analysts</strong> use data to answer business questions. <strong>Chief Data Officers</strong> coordinate across these roles and establish enterprise data strategy. Regular governance meetings identify and resolve issues. Data councils with cross-functional representation ensure governance serves all organizational needs. Clear escalation paths resolve disputes about data interpretation or access. Documentation of governance decisions and rationale helps maintain consistency over time.
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Data Catalogs and Metadata</div>
+                        <div class="section-content">
+                            Data catalogs are repositories of metadata about an organization's data assets. They document what data exists, where it's stored, who owns it, how it's defined, how it's used, and how data flows through systems. Tools like Collibra, Alation, and Apache Atlas enable centralized metadata management. Catalogs enable data discovery—users can search for relevant data without knowing exact system locations. Business glossaries in catalogs define terms consistently (what exactly is "customer"?). Data lineage tracks how data flows from source to destination, showing dependencies and impact of changes. Tags and classifications help users find related data. Catalogs require investment in metadata maintenance but provide significant returns through improved data accessibility and understanding. Modern catalogs support data profiling, quality metrics, and sample data exploration.
+                        </div>
+                    </div>
+
+                    <div class="key-points">
+                        <div class="key-point">
+                            <div class="key-point-title">Policy Management</div>
+                            <div class="key-point-content">Define, communicate, and enforce policies around data usage, retention, and access.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Data Classification</div>
+                            <div class="key-point-content">Tag data by sensitivity level to guide protection measures and access controls.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Documentation</div>
+                            <div class="key-point-content">Maintain comprehensive documentation of data definitions, business rules, and processes.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Cost Management</div>
+                            <div class="key-point-content">Monitor and optimize data infrastructure costs, especially in cloud environments.</div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                day: 10,
+                title: "Implementation & Best Practices",
+                subtitle: "Putting it all together",
+                readTime: 15,
+                topics: ["Implementation strategies", "Team organization", "Change management", "Tools selection", "Career paths", "Common pitfalls", "Future trends", "Continuous learning"],
+                content: `
+                    <div class="content-section">
+                        <div class="section-title">Implementing Data Management Programs</div>
+                        <div class="section-content">
+                            Successful data management implementation requires more than technology—it requires organizational change. Start with executive alignment on vision and business value. Establish governance structures and assign clear responsibilities before buying tools. Many organizations fail by purchasing expensive tools without clear understanding of how they'll be used. Build data management capabilities incrementally: begin with critical data domains, prove value, then expand. Quick wins (like improving data quality for a key report) build momentum. Training and change management help teams adapt to new processes and tools. Celebrate successes and learn from failures transparently. Implementation typically takes 18-24 months to mature; expect patience and consistent investment. Appoint strong program leads to shepherd initiatives through organizational obstacles.
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Building Effective Teams</div>
+                        <div class="section-content">
+                            Data management teams need diverse skills: technical (database administration, ETL development), analytical (data analysis, visualization), business (understanding requirements, domain expertise), and organizational (change management, communication). Team size depends on organization scale and complexity. A small organization might have one person wearing many hats; large enterprises might have hundreds. Cross-functional collaboration is essential—data people need business understanding and business people need data literacy. Mentoring and knowledge sharing prevent siloed expertise. Hiring for attitude and training for skills often works better than hiring for specific technical expertise. Create career paths showing how data professionals can advance. Recognize that data work can be unglamorous (lots of cleaning and documentation) but emphasize its strategic importance.
+                        </div>
+                    </div>
+
+                    <div class="key-points">
+                        <div class="key-point">
+                            <div class="key-point-title">Start Small</div>
+                            <div class="key-point-content">Focus on critical use cases before attempting enterprise-wide implementation.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Measure Value</div>
+                            <div class="key-point-content">Quantify business impact to justify ongoing investment and course corrections.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Iterate & Improve</div>
+                            <div class="key-point-content">Data management is continuous improvement, not a destination.</div>
+                        </div>
+                        <div class="key-point">
+                            <div class="key-point-title">Common Pitfalls</div>
+                            <div class="key-point-content">Avoid technology-first approaches, poor change management, unclear governance, and unrealistic timelines.</div>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <div class="section-title">Future Trends and Continuous Learning</div>
+                        <div class="section-content">
+                            Data management evolves rapidly. AI and machine learning are increasingly embedded in data platforms for anomaly detection, data quality assessment, and intelligent data discovery. DataOps applies DevOps principles (automation, CI/CD, monitoring) to data pipelines. Federated data governance distributes governance decisions to business units while maintaining enterprise standards. Real-time data streams become increasingly important as businesses require immediate insights. Privacy-preserving technologies like differential privacy and federated learning address growing data privacy concerns. Decentralized data architectures with data mesh principles distribute data ownership while maintaining interoperability. Stay current through conferences, online courses, certifications, and professional communities. Read industry publications. Join user groups. Experiment with new technologies. The data field moves fast, and continuous learning is essential for staying relevant.
+                        </div>
+                    </div>
+
+                    <div class="highlight">
+                        <strong>Your Data Journey:</strong> Data management mastery is a continuous journey. You've learned foundations here, but real learning happens through practice, experimentation, and continuously adapting to new challenges and technologies. Embrace the learning mindset!
+                    </div>
+                `
+            }
+        ];
+
+        function renderCourse() {
+            const grid = document.getElementById('courseGrid');
+            courseData.forEach(day => {
+                const card = document.createElement('div');
+                card.className = 'day-card';
+                card.innerHTML = `
+                    <div class="day-number">Day ${day.day}</div>
+                    <h3 class="day-title">${day.title}</h3>
+                    <p class="day-subtitle">${day.subtitle}</p>
+                    <div class="day-meta">
+                        <div class="meta-item">
+                            <div class="meta-icon"></div>
+                            <span>⏱️ ${day.readTime} min read</span>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-icon"></div>
+                            <span>📚 ${day.topics.length} topics</span>
+                        </div>
+                    </div>
+                    <ul class="topics-list">
+                        ${day.topics.slice(0, 4).map(topic => `<li>${topic}</li>`).join('')}
+                        ${day.topics.length > 4 ? `<li>+${day.topics.length - 4} more</li>` : ''}
+                    </ul>
+                    <button class="expand-btn" onclick="openModal(${day.day - 1})">Read Full Lesson</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openModal(index) {
+            const day = courseData[index];
+            document.getElementById('modalTitle').textContent = `Day ${day.day}: ${day.title}`;
+            document.getElementById('readTime').textContent = `${day.readTime} min`;
+            document.getElementById('topicCount').textContent = day.topics.length;
+            document.getElementById('modalBody').innerHTML = day.content;
+            document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        renderCourse();
+    </script>
 </body>
 </html>
